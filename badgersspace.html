@@ -1,0 +1,189 @@
+<html>
+    <head>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body x-data="component()">
+        <div class="container mt-5">
+            <p x-text="url" class="bg-dark-subtle p-3 font-monospace user-select-all"></p>
+            <p x-text="img_link" class="bg-dark-subtle p-3 font-monospace user-select-all"></p>
+
+            <div
+                style="min-height: 50px"
+                class="d-flex justify-content-center align-items-center"
+                x-html="img_link"
+            ></div>
+
+            <hr />
+
+            <form>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">label (left)</label>
+                        <input class="form-control" type="text" x-model="label" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">status (right)</label>
+                        <input class="form-control" type="text" x-model="status" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label>labelColor (left)</label>
+                        <div class="input-group mb-3">
+                            <span
+                                style="width: 6rem"
+                                class="input-group-text font-monospace"
+                                id="ig_labelColor"
+                            ></span>
+                            <input
+                                id="ip_labelColor"
+                                class="form-control"
+                                type="color"
+                                x-model="label_color"
+                            />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>color (right)</label>
+                        <div class="input-group mb-3">
+                            <span
+                                style="width: 6rem"
+                                class="input-group-text font-monospace"
+                                id="ig_color"
+                            ></span>
+                            <input
+                                id="ip_color"
+                                class="form-control"
+                                type="color"
+                                x-model="color"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">style</label>
+                        <select class="form-select" x-model="theme">
+                            <option>honey</option>
+                            <option>tailwind</option>
+                            <option>badgen</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">scale</label>
+                        <input class="form-control" type="text" x-model="scale" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">corner_radius</label>
+                        <input class="form-control" type="text" x-model="corner_radius" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">icon</label>
+                        <input type="text" class="form-control" x-model="icon" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">icon width</label>
+                        <input class="form-control" type="text" x-model="icon_width" />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">link</label>
+                            <input class="form-control" type="text" x-model="link" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <ul>
+                                <li>
+                                    <a target="_blank" href="https://badgers.space/icons"
+                                        >badgers.space/icons</a
+                                    >
+                                </li>
+                                <li>
+                                    <a target="_blank" href="https://brandcolors.net/"
+                                        >brandcolors.net</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
+
+<script>
+    function component() {
+        return {
+            label: "label",
+            status: "status",
+            color: "",
+            label_color: "",
+            scale: "",
+            theme: "",
+            icon: "",
+            icon_width: "",
+            corner_radius: "",
+            link: "",
+            img_link: "",
+            url: "",
+
+            init() {
+                const ip_labelColor = document.getElementById("ip_labelColor");
+                const ip_color = document.getElementById("ip_color");
+
+                const ig_labelColor = document.getElementById("ig_labelColor");
+                const ig_color = document.getElementById("ig_color");
+
+                this.getUrl();
+                this.$watch("label", () => this.getUrl());
+                this.$watch("status", () => this.getUrl());
+                this.$watch("color", () => this.getUrl());
+                this.$watch("label_color", () => this.getUrl());
+                this.$watch("scale", () => this.getUrl());
+                this.$watch("theme", () => this.getUrl());
+                this.$watch("icon", () => this.getUrl());
+                this.$watch("icon_width", () => this.getUrl());
+                this.$watch("corner_radius", () => this.getUrl());
+                this.$watch("link", () => this.getUrl());
+
+                ip_labelColor.addEventListener("input", (event) => {
+                    ig_labelColor.innerHTML = event.target.value;
+                });
+
+                ip_color.addEventListener("input", (event) => {
+                    ig_color.innerHTML = event.target.value;
+                });
+            },
+
+            getUrl() {
+                path = ["badge", this.label, this.status].join("/");
+                let url = new URL(path, "https://badgers.space");
+
+                url.searchParams.set("color", this.color);
+                url.searchParams.set("label_color", this.label_color);
+                url.searchParams.set("scale", this.scale);
+                url.searchParams.set("theme", this.theme);
+                url.searchParams.set("icon", this.icon);
+                url.searchParams.set("icon_width", this.icon_width);
+                url.searchParams.set("corner_radius", this.corner_radius);
+
+                this.url = url;
+                this.img_link = `<a href="${this.link}"><img src="${this.url}"></a>`;
+            },
+        };
+    }
+</script>

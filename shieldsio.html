@@ -1,0 +1,198 @@
+<html>
+    <head>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body x-data="component()">
+        <div class="container mt-5">
+            <p x-text="url" class="bg-dark-subtle p-3 font-monospace user-select-all"></p>
+            <p x-text="img_link" class="bg-dark-subtle p-3 font-monospace user-select-all"></p>
+
+            <div
+                style="min-height: 50px"
+                class="d-flex justify-content-center align-items-center"
+                x-html="img_link"
+            ></div>
+
+            <hr />
+
+            <form>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">label (left)</label>
+                        <input class="form-control" type="text" x-model="label" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">message (right)</label>
+                        <input class="form-control" type="text" x-model="message" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label>labelColor (left)</label>
+                        <div class="input-group mb-3">
+                            <span
+                                style="width: 6rem"
+                                class="input-group-text font-monospace"
+                                id="ig_labelColor"
+                            ></span>
+                            <input
+                                id="ip_labelColor"
+                                class="form-control"
+                                type="color"
+                                x-model="labelColor"
+                            />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>color (right)</label>
+                        <div class="input-group mb-3">
+                            <span
+                                style="width: 6rem"
+                                class="input-group-text font-monospace"
+                                id="ig_color"
+                            ></span>
+                            <input
+                                id="ip_color"
+                                class="form-control"
+                                type="color"
+                                x-model="color"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">style</label>
+                        <select class="form-select" x-model="style">
+                            <option>plastic</option>
+                            <option>flat</option>
+                            <option>flat-square</option>
+                            <option>for-the-badge</option>
+                            <option>social</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">logo</label>
+                        <input type="text" class="form-control" x-model="logo" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">logoColor</label>
+                        <div class="input-group mb-3">
+                            <span
+                                style="width: 6rem"
+                                class="input-group-text font-monospace"
+                                id="ig_logoColor"
+                            ></span>
+                            <input
+                                id="ip_logoColor"
+                                class="form-control"
+                                type="color"
+                                x-model="logoColor"
+                            />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">logoWidth</label>
+                        <input class="form-control" type="text" x-model="logoWidth" />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">link</label>
+                            <input class="form-control" type="text" x-model="link" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <ul>
+                                <li>
+                                    <a target="_blank" href="https://simpleicons.org/"
+                                        >simpleicons.org</a
+                                    >
+                                </li>
+                                <li>
+                                    <a target="_blank" href="https://brandcolors.net/"
+                                        >brandcolors.net</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
+
+<script>
+    function component() {
+        return {
+            style: "",
+            label: "",
+            logo: "",
+            logoColor: "",
+            logoWidth: "",
+            labelColor: "",
+            color: "",
+            message: "",
+            link: "",
+            img_link: "",
+            url: "",
+
+            init() {
+                const ip_labelColor = document.getElementById("ip_labelColor");
+                const ip_logoColor = document.getElementById("ip_logoColor");
+                const ip_color = document.getElementById("ip_color");
+
+                const ig_labelColor = document.getElementById("ig_labelColor");
+                const ig_logoColor = document.getElementById("ig_logoColor");
+                const ig_color = document.getElementById("ig_color");
+
+                this.getUrl();
+                this.$watch("style", () => this.getUrl());
+                this.$watch("label", () => this.getUrl());
+                this.$watch("logo", () => this.getUrl());
+                this.$watch("logoColor", () => this.getUrl());
+                this.$watch("logoWidth", () => this.getUrl());
+                this.$watch("labelColor", () => this.getUrl());
+                this.$watch("color", () => this.getUrl());
+                this.$watch("message", () => this.getUrl());
+                this.$watch("link", () => this.getUrl());
+
+                ip_labelColor.addEventListener("input", (event) => {
+                    ig_labelColor.innerHTML = event.target.value;
+                });
+                ip_logoColor.addEventListener("input", (event) => {
+                    ig_logoColor.innerHTML = event.target.value;
+                });
+                ip_color.addEventListener("input", (event) => {
+                    ig_color.innerHTML = event.target.value;
+                });
+            },
+
+            getUrl() {
+                let url = new URL("https://img.shields.io/static/v1");
+
+                url.searchParams.set("style", this.style);
+                url.searchParams.set("label", this.label);
+                url.searchParams.set("logo", this.logo);
+                url.searchParams.set("logoColor", this.logoColor);
+                url.searchParams.set("logoWidth", this.logoWidth);
+                url.searchParams.set("labelColor", this.labelColor);
+                url.searchParams.set("color", this.color);
+                url.searchParams.set("message", this.message);
+
+                this.url = url;
+                this.img_link = `<a href="${this.link}"><img src="${this.url}"></a>`;
+            },
+        };
+    }
+</script>
